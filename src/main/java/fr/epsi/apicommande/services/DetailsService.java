@@ -1,6 +1,7 @@
 package fr.epsi.apicommande.services;
 
 import fr.epsi.apicommande.models.Details;
+import fr.epsi.apicommande.repositories.CommandeRepository;
 import fr.epsi.apicommande.repositories.DetailsRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
@@ -11,16 +12,18 @@ import java.util.List;
 public class DetailsService {
 
     private final DetailsRepository detailsRepo;
+    private final CommandeRepository commandeRepo;
 
-    public DetailsService(DetailsRepository detailsRepo) {
+    public DetailsService(DetailsRepository detailsRepo, CommandeRepository commandeRepo) {
         this.detailsRepo = detailsRepo;
+        this.commandeRepo = commandeRepo;
     }
 
     public List<Details> getAllDetails() {
         return detailsRepo.findAll();
     }
 
-    public Details getDetailsById(String id) {
+    public Details getDetailsById(Long id) {
         return detailsRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Details introuvable avec ID : " + id));
     }
 
@@ -28,16 +31,15 @@ public class DetailsService {
         return detailsRepo.save(details);
     }
 
-    public Details updateDetails(String id, Details details) {
-        return detailsRepo.findById(id).map(existingDetails -> {
-            existingDetails.setQuantity(details.getQuantity());
-            existingDetails.setCommande(details.getCommande());
-            existingDetails.setProduits(details.getProduits());
-            return detailsRepo.save(existingDetails);
-        }).orElseThrow(() -> new RuntimeException("Details not found"));
+    public Details updateDetails(Long id, Details updatedDetails) {
+        return detailsRepo.findById(id).map(details -> {
+            details.setQuantity(updatedDetails.getQuantity());
+            details.setCommande(updatedDetails.getCommande());
+            return detailsRepo.save(details);
+        }).orElseThrow(() -> new EntityNotFoundException("Details introuvable avec ID : " + id));
     }
 
-    public void deleteDetails(String id) {
+    public void deleteDetails(Long id) {
         detailsRepo.deleteById(id);
     }
 }

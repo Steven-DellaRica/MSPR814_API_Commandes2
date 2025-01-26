@@ -4,30 +4,25 @@ import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.UUID;
 
 @Entity
 public class Status {
 
     @Id
-    @Column(length = 36, unique = true, nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @Column(nullable = false, unique = true)
     private String currentStatus;
 
-    @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)
+    @ManyToMany(mappedBy = "statuses")
     private Set<Commande> commandes = new HashSet<>();
 
-    public Status() {
-        this.id = UUID.randomUUID().toString();
-    }
-
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -22,7 +22,7 @@ public class StatusController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Status> getStatusById(@PathVariable String id) {
+    public ResponseEntity<Status> getStatusById(@PathVariable Long id) {
         return ResponseEntity.ok(statusService.getStatusById(id));
     }
 
@@ -32,12 +32,12 @@ public class StatusController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Status> updateStatus(@PathVariable String id, @RequestBody Status updatedStatus) {
+    public ResponseEntity<Status> updateStatus(@PathVariable Long id, @RequestBody Status updatedStatus) {
         return ResponseEntity.ok(statusService.updateStatus(id, updatedStatus));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStatus(@PathVariable String id) {
+    public ResponseEntity<Void> deleteStatus(@PathVariable Long id) {
         statusService.deleteStatus(id);
         return ResponseEntity.noContent().build();
     }

@@ -1,39 +1,40 @@
 package fr.epsi.apicommande.models;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDate;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "commandes")
 public class Commande {
 
     @Id
-    @Column(length = 36, unique = true, nullable = false)
-    private String id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
-    @Column(name = "date_creation", nullable = false)
+    @Column(name = "date_creation")
     private LocalDate dateCreation;
 
-    @ManyToOne
-    @JoinColumn(name = "status_id", nullable = false)
-    private Status status;
+    @ManyToMany
+    @JoinTable(
+            name = "commande_status",
+            joinColumns = @JoinColumn( name = "commande_id" ),
+            inverseJoinColumns = @JoinColumn(name = "status_id")
+    )
+    private Set<Status> statuses = new HashSet<>();
 
-    @OneToOne(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Details detail;
-
-    public Commande() {
-        this.id = UUID.randomUUID().toString();
-        this.dateCreation = LocalDate.now();
-    }
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Details> details = new ArrayList<>();
 
     // Getters et Setters
-    public String getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(String id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -43,12 +44,5 @@ public class Commande {
 
     public void setDateCreation(LocalDate dateCreation) {
         this.dateCreation = dateCreation;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-    public void setStatus(Status status) {
-        this.status = status;
     }
 }

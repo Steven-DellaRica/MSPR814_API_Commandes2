@@ -22,7 +22,7 @@ public class DetailsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Details> getDetailsById(@PathVariable String id) {
+    public ResponseEntity<Details> getDetailsById(@PathVariable Long id) {
         return ResponseEntity.ok(detailsService.getDetailsById(id));
     }
 
@@ -32,16 +32,12 @@ public class DetailsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Details> updateDetails(@PathVariable String id, @RequestBody Details details) {
-        try {
-            return ResponseEntity.ok(detailsService.updateDetails(id, details));
-        } catch (RuntimeException e) {
-            return ResponseEntity.notFound().build();
-        }
+    public ResponseEntity<Details> updateDetails(@PathVariable Long id, @RequestBody Details updatedDetails) {
+        return ResponseEntity.ok(detailsService.updateDetails(id, updatedDetails));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDetails(@PathVariable String id) {
+    public ResponseEntity<Void> deleteDetails(@PathVariable Long id) {
         detailsService.deleteDetails(id);
         return ResponseEntity.noContent().build();
     }
