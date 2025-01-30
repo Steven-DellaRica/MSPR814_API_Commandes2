@@ -1,19 +1,18 @@
 package fr.epsi.apicommande.models;
 
+import fr.epsi.apicommande.services.UUIDConverter;
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "commandes")
 public class Commande {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    @Convert(converter = UUIDConverter.class)
+    private UUID id;
 
     @Column(name = "date_creation")
     private LocalDate dateCreation;
@@ -30,11 +29,11 @@ public class Commande {
     private List<Details> details = new ArrayList<>();
 
     // Getters et Setters
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

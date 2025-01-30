@@ -1,16 +1,19 @@
 package fr.epsi.apicommande.models;
 
+import fr.epsi.apicommande.services.UUIDConverter;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
 import java.util.Set;
+import java.util.UUID;
 
 @Entity
 public class Status {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    @Convert(converter = UUIDConverter.class)
+    private UUID id;
 
     @Column(nullable = false, unique = true)
     private String currentStatus;
@@ -18,11 +21,11 @@ public class Status {
     @ManyToMany(mappedBy = "statuses")
     private Set<Commande> commandes = new HashSet<>();
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 

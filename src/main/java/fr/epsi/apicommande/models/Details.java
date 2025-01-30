@@ -1,13 +1,17 @@
 package fr.epsi.apicommande.models;
 
+import fr.epsi.apicommande.services.UUIDConverter;
 import jakarta.persistence.*;
+
+import java.util.UUID;
 
 @Entity
 public class Details {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @GeneratedValue
+    @Convert(converter = UUIDConverter.class)
+    private UUID id;
 
     @Column(nullable = false)
     private int quantity;
@@ -16,11 +20,11 @@ public class Details {
     @JoinColumn(name = "commande_id", nullable = false)
     private Commande commande;
 
-    public Long getId() {
+    public UUID getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(UUID id) {
         this.id = id;
     }
 
