@@ -6,6 +6,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/apicommande/details")
@@ -22,7 +23,7 @@ public class DetailsController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Details> getDetailsById(@PathVariable Long id) {
+    public ResponseEntity<Details> getDetailsById(@PathVariable UUID id) {
         return ResponseEntity.ok(detailsService.getDetailsById(id));
     }
 
@@ -32,12 +33,12 @@ public class DetailsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Details> updateDetails(@PathVariable Long id, @RequestBody Details updatedDetails) {
+    public ResponseEntity<Details> updateDetails(@PathVariable UUID id, @RequestBody Details updatedDetails) {
         return ResponseEntity.ok(detailsService.updateDetails(id, updatedDetails));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteDetails(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteDetails(@PathVariable UUID id) {
         detailsService.deleteDetails(id);
         return ResponseEntity.noContent().build();
     }

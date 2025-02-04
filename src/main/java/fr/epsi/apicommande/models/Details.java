@@ -11,6 +11,7 @@ public class Details {
     @Id
     @GeneratedValue
     @Convert(converter = UUIDConverter.class)
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
     @Column(nullable = false)

@@ -2,6 +2,8 @@ package fr.epsi.apicommande.models;
 
 import fr.epsi.apicommande.services.UUIDConverter;
 import jakarta.persistence.*;
+import org.hibernate.annotations.GenericGenerator;
+
 import java.time.LocalDate;
 import java.util.*;
 
@@ -10,11 +12,17 @@ import java.util.*;
 public class Commande {
 
     @Id
-    @GeneratedValue
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Convert(converter = UUIDConverter.class)
+    @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
-    @Column(name = "date_creation")
+    @PostLoad
+    public void postLoad() {
+        System.out.println("UUID chargé : " + id.toString());
+    }
+
+    @Column(name = "date_creation", nullable = false)
     private LocalDate dateCreation;
 
     @ManyToMany
