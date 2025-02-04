@@ -1,6 +1,7 @@
 package fr.epsi.apicommande.controllers;
 
 import fr.epsi.apicommande.models.Commande;
+import fr.epsi.apicommande.repositories.CommandeRepository;
 import fr.epsi.apicommande.services.CommandeService;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.http.ResponseEntity;
@@ -14,9 +15,11 @@ import java.util.UUID;
 public class CommandeController {
 
     private final CommandeService commandeService;
+    private final CommandeRepository commandeRepository;
 
-    public CommandeController(CommandeService commandeService) {
+    public CommandeController(CommandeService commandeService, CommandeRepository commandeRepository) {
         this.commandeService = commandeService;
+        this.commandeRepository = commandeRepository;
     }
 
     @GetMapping
@@ -25,10 +28,17 @@ public class CommandeController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Commande> getCommandeById(@PathVariable UUID id) {
-        return commandeService.getCommandeById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+    public ResponseEntity<Commande> getCommandeById(@PathVariable String id) {
+        try {
+//            UUID uuid = UUID.fromString(id);
+            System.out.println(id);
+            return commandeService.getCommandeById(id)
+                    .map(ResponseEntity::ok)
+                    .orElse(ResponseEntity.notFound().build());
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(null);
+        }
+
     }
 
     @PostMapping

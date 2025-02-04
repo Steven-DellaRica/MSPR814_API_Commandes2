@@ -3,7 +3,11 @@ package fr.epsi.apicommande.models;
 import fr.epsi.apicommande.services.UUIDConverter;
 import jakarta.persistence.*;
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.SqlTypes;
 
+import java.sql.Types;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -13,7 +17,8 @@ public class Commande {
 
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
-    @Convert(converter = UUIDConverter.class)
+//    @Convert(converter = fr.epsi.apicommande.services.UUIDConverter.class)
+    @JdbcTypeCode(SqlTypes.BINARY)
     @Column(columnDefinition = "BINARY(16)")
     private UUID id;
 
