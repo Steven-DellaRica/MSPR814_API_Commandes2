@@ -5,16 +5,11 @@ import fr.epsi.apicommande.repositories.CommandeRepository;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class CommandeService {
-
-    // Rajouter les gestions d'erreurs
 
     private final CommandeRepository commandeRepo;
 
@@ -27,17 +22,7 @@ public class CommandeService {
     }
 
     public Optional<Commande> getCommandeById(String id) {
-        try {
-            UUID uuid = UUID.fromString(id);
-            // Convertir l'UUID en BINARY(16) (byte[])
-            byte[] binaryUuid = convertUUIDToBytes(uuid);
-            // Chercher la commande en base de données en utilisant le UUID converti
-            return commandeRepo.findByIdAsBinary(binaryUuid);
-        } catch (IllegalArgumentException e) {
-            return Optional.empty(); // Si l'UUID n'est pas valide, retourner une réponse vide
-        }
-
-//        return commandeRepo.findById(id);
+        return commandeRepo.findById(id);
     }
 
     public Commande createCommande(Commande commande) {
@@ -51,11 +36,8 @@ public class CommandeService {
         return savedCommande;
     }
 
-    public Commande updateCommande(UUID id, Commande updatedCommande) {
+    public Commande updateCommande(String id, Commande updatedCommande) {
         try {
-            // Convertir l'UUID en BINARY(16) (byte[])
-            byte[] binaryUuid = convertUUIDToBytes(id);
-            // Chercher la commande en base de données en utilisant le UUID converti
             return commandeRepo.findById(id).map(existingCommande -> {
                 // Modifier directement StatusService ou Controller
                 // existingCommande.setStatus(updatedCommande.getStatus());
@@ -70,15 +52,7 @@ public class CommandeService {
 
     }
 
-    public void deleteCommande(UUID id) {
-//        byte[] binaryUuid = convertUUIDToBytes(id);
+    public void deleteCommande(String id) {
         commandeRepo.deleteById(id);
-    }
-
-    private byte[] convertUUIDToBytes(UUID uuid) {
-        ByteBuffer buffer = ByteBuffer.wrap(new byte[16]);
-        buffer.putLong(uuid.getMostSignificantBits());
-        buffer.putLong(uuid.getLeastSignificantBits());
-        return buffer.array();
     }
 }

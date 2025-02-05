@@ -7,24 +7,21 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.UUID;
 
 @Service
 public class DetailsService {
 
     private final DetailsRepository detailsRepo;
-    private final CommandeRepository commandeRepo;
 
     public DetailsService(DetailsRepository detailsRepo, CommandeRepository commandeRepo) {
         this.detailsRepo = detailsRepo;
-        this.commandeRepo = commandeRepo;
     }
 
     public List<Details> getAllDetails() {
         return detailsRepo.findAll();
     }
 
-    public Details getDetailsById(UUID id) {
+    public Details getDetailsById(String id) {
         return detailsRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Details introuvable avec ID : " + id));
     }
 
@@ -32,7 +29,7 @@ public class DetailsService {
         return detailsRepo.save(details);
     }
 
-    public Details updateDetails(UUID id, Details updatedDetails) {
+    public Details updateDetails(String id, Details updatedDetails) {
         return detailsRepo.findById(id).map(details -> {
             details.setQuantity(updatedDetails.getQuantity());
             details.setCommande(updatedDetails.getCommande());
@@ -40,7 +37,7 @@ public class DetailsService {
         }).orElseThrow(() -> new EntityNotFoundException("Details introuvable avec ID : " + id));
     }
 
-    public void deleteDetails(UUID id) {
+    public void deleteDetails(String id) {
         detailsRepo.deleteById(id);
     }
 }

@@ -1,25 +1,23 @@
 package fr.epsi.apicommande.controllers;
 
 import fr.epsi.apicommande.models.Commande;
-import fr.epsi.apicommande.repositories.CommandeRepository;
 import fr.epsi.apicommande.services.CommandeService;
+
 import jakarta.persistence.EntityNotFoundException;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/apicommande/commandes")
 public class CommandeController {
 
     private final CommandeService commandeService;
-    private final CommandeRepository commandeRepository;
 
-    public CommandeController(CommandeService commandeService, CommandeRepository commandeRepository) {
+    public CommandeController(CommandeService commandeService) {
         this.commandeService = commandeService;
-        this.commandeRepository = commandeRepository;
     }
 
     @GetMapping
@@ -30,8 +28,6 @@ public class CommandeController {
     @GetMapping("/{id}")
     public ResponseEntity<Commande> getCommandeById(@PathVariable String id) {
         try {
-//            UUID uuid = UUID.fromString(id);
-            System.out.println(id);
             return commandeService.getCommandeById(id)
                     .map(ResponseEntity::ok)
                     .orElse(ResponseEntity.notFound().build());
@@ -47,7 +43,7 @@ public class CommandeController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Commande> updateCommande(@PathVariable UUID id, @RequestBody Commande updatedCommande) {
+    public ResponseEntity<Commande> updateCommande(@PathVariable String id, @RequestBody Commande updatedCommande) {
         try {
             Commande commande = commandeService.updateCommande(id, updatedCommande);
             return ResponseEntity.ok(commande);
@@ -57,7 +53,7 @@ public class CommandeController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCommande(@PathVariable UUID id) {
+    public ResponseEntity<Void> deleteCommande(@PathVariable String id) {
         commandeService.deleteCommande(id);
         return ResponseEntity.noContent().build();
     }

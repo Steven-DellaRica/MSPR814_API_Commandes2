@@ -4,8 +4,6 @@ import fr.epsi.apicommande.models.Details;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.UUID;
-
 @Repository
-public interface DetailsRepository extends JpaRepository<Details, UUID> {
+public interface DetailsRepository extends JpaRepository<Details, String> {
 }

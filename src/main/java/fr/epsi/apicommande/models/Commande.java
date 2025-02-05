@@ -1,13 +1,7 @@
 package fr.epsi.apicommande.models;
 
-import fr.epsi.apicommande.services.UUIDConverter;
 import jakarta.persistence.*;
-import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.annotations.Type;
-import org.hibernate.type.SqlTypes;
 
-import java.sql.Types;
 import java.time.LocalDate;
 import java.util.*;
 
@@ -16,19 +10,15 @@ import java.util.*;
 public class Commande {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-//    @Convert(converter = fr.epsi.apicommande.services.UUIDConverter.class)
-    @JdbcTypeCode(SqlTypes.BINARY)
-    @Column(columnDefinition = "BINARY(16)")
-    private UUID id;
-
-    @PostLoad
-    public void postLoad() {
-        System.out.println("UUID chargé : " + id.toString());
-    }
+    @Column(length = 36, unique = true, nullable = false)
+    private String id;
 
     @Column(name = "date_creation", nullable = false)
     private LocalDate dateCreation;
+
+    public Commande() {
+        this.id = UUID.randomUUID().toString();
+    }
 
     @ManyToMany
     @JoinTable(
@@ -36,17 +26,18 @@ public class Commande {
             joinColumns = @JoinColumn( name = "commande_id" ),
             inverseJoinColumns = @JoinColumn(name = "status_id")
     )
+
     private Set<Status> statuses = new HashSet<>();
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Details> details = new ArrayList<>();
 
     // Getters et Setters
-    public UUID getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
