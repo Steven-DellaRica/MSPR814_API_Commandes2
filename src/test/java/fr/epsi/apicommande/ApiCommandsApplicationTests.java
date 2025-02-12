@@ -1,13 +1,13 @@
-package epsi.mspr814.kls.commandes;
+package fr.epsi.apicommande;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class CommandesApplicationTests {
+class ApiCommandsApplicationTests {
 
-	@Test
-	void contextLoads() {
-	}
+    @Test
+    void contextLoads() {
+    }
 
 }
