@@ -32,8 +32,12 @@ public class DetailsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Details> updateDetails(@PathVariable String id, @RequestBody Details updatedDetails) {
-        return ResponseEntity.ok(detailsService.updateDetails(id, updatedDetails));
+    public ResponseEntity<Details> updateDetails(@PathVariable String id, @RequestBody Details details) {
+        try {
+            return ResponseEntity.ok(detailsService.updateDetails(id, details));
+        } catch (RuntimeException e) {
+            return ResponseEntity.notFound().build();
+        }
     }
 
     @DeleteMapping("/{id}")

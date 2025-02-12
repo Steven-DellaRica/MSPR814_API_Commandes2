@@ -3,8 +3,6 @@ package fr.epsi.apicommande.controllers;
 import fr.epsi.apicommande.models.Commande;
 import fr.epsi.apicommande.services.CommandeService;
 
-import jakarta.persistence.EntityNotFoundException;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;

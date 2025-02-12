@@ -20,12 +20,12 @@ public class Commande {
     @JoinColumn(name = "status_id", nullable = false)
     private Status status;
 
-    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Details> details = new ArrayList<>();
+    @OneToOne(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Details detail;
 
     public Commande() {
         this.id = UUID.randomUUID().toString();
-        //this.dateCreation = LocalDate.now();
+        this.dateCreation = LocalDate.now();
     }
 
     // Getters et Setters
