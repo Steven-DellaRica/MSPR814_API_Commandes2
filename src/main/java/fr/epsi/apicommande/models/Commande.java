@@ -1,5 +1,6 @@
 package fr.epsi.apicommande.models;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -18,6 +19,7 @@ public class Commande {
 
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
+    @JsonManagedReference
     private Status status;
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
