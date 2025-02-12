@@ -1,6 +1,5 @@
 package fr.epsi.apicommande.services;
 
-
 import fr.epsi.apicommande.models.Status;
 import fr.epsi.apicommande.repositories.StatusRepository;
 import jakarta.persistence.EntityNotFoundException;

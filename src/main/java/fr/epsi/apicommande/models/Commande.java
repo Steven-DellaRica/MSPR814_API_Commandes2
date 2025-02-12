@@ -16,21 +16,17 @@ public class Commande {
     @Column(name = "date_creation", nullable = false)
     private LocalDate dateCreation;
 
-    public Commande() {
-        this.id = UUID.randomUUID().toString();
-    }
-
-    @ManyToMany
-    @JoinTable(
-            name = "commande_status",
-            joinColumns = @JoinColumn( name = "commande_id" ),
-            inverseJoinColumns = @JoinColumn(name = "status_id")
-    )
-
-    private Set<Status> statuses = new HashSet<>();
+    @ManyToOne
+    @JoinColumn(name = "status_id", nullable = false)
+    private Status status;
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Details> details = new ArrayList<>();
+
+    public Commande() {
+        this.id = UUID.randomUUID().toString();
+        //this.dateCreation = LocalDate.now();
+    }
 
     // Getters et Setters
     public String getId() {
@@ -47,5 +43,12 @@ public class Commande {
 
     public void setDateCreation(LocalDate dateCreation) {
         this.dateCreation = dateCreation;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+    public void setStatus(Status status) {
+        this.status = status;
     }
 }

@@ -16,12 +16,12 @@ public class Status {
     @Column(nullable = false, unique = true)
     private String currentStatus;
 
+    @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)
+    private Set<Commande> commandes = new HashSet<>();
+
     public Status() {
         this.id = UUID.randomUUID().toString();
     }
-
-    @ManyToMany(mappedBy = "statuses")
-    private Set<Commande> commandes = new HashSet<>();
 
     public String getId() {
         return id;
