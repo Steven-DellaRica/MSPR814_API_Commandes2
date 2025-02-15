@@ -16,6 +16,7 @@ import javax.crypto.spec.SecretKeySpec;
 
 @Configuration
 public class SecurityConfig {
+    // à commenter pour les tests
 
     @Value("${jwt.secret}")
     private String jwtSecret;
