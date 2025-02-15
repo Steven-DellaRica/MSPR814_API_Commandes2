@@ -6,6 +6,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/apicommande/details")
@@ -17,23 +19,25 @@ public class DetailsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Details>> getAllDetails() {
-        return ResponseEntity.ok(detailsService.getAllDetails());
+    public List<Details> getAllDetails() {
+        return detailsService.getAllDetails();
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<Details> getDetailsById(@PathVariable String id) {
-        return ResponseEntity.ok(detailsService.getDetailsById(id));
+        Optional<Details> details = detailsService.getDetailsById(id);
+        return details.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Details> createDetails(@RequestBody Details details) {
-        return ResponseEntity.ok(detailsService.createDetails(details));
+    public Details createDetails(@RequestBody Details details) {
+        return detailsService.createDetails(details);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<Details> updateDetails(@PathVariable String id, @RequestBody Details updatedDetails) {
-        return ResponseEntity.ok(detailsService.updateDetails(id, updatedDetails));
+        Details details = detailsService.updateDetails(id, updatedDetails);
+        return details != null ? ResponseEntity.ok(details) : ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}")
@@ -42,3 +46,4 @@ public class DetailsController {
         return ResponseEntity.noContent().build();
     }
 }
+

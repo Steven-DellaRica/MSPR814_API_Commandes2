@@ -1,8 +1,9 @@
 package fr.epsi.apicommande.services;
 
 import fr.epsi.apicommande.models.Commande;
+import fr.epsi.apicommande.models.Status;
 import fr.epsi.apicommande.repositories.CommandeRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import fr.epsi.apicommande.repositories.StatusRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,11 +12,12 @@ import java.util.Optional;
 @Service
 public class CommandeService {
 
-    @Autowired
     private final CommandeRepository commandeRepo;
+    private final StatusRepository statusRepo;
 
-    public CommandeService(CommandeRepository commandeRepo) {
+    public CommandeService(CommandeRepository commandeRepo, StatusRepository statusRepo) {
         this.commandeRepo = commandeRepo;
+        this.statusRepo = statusRepo;
     }
 
     public List<Commande> getAllCommandes() {
@@ -27,15 +29,24 @@ public class CommandeService {
     }
 
     public Commande createCommande(Commande commande) {
+        if (commande.getStatus() == null) {
+            Status defaultStatus = statusRepo.findById("8843acbc-8058-488b-83a8-74e6078ab692").orElseThrow(() -> new RuntimeException("Status non trouvé"));
+            commande.setStatus(defaultStatus);
+        }
         return commandeRepo.save(commande);
     }
 
-    public Optional<Commande> updateCommande(String id, Commande updatedCommande) {
-        return commandeRepo.findById(id).map(existingCommande -> {
+    public Commande updateCommande(String id, Commande updatedCommande) {
+        Optional<Commande> optionalCommande = commandeRepo.findById(id);
+        if (optionalCommande.isPresent()) {
+            Commande existingCommande = optionalCommande.get();
             existingCommande.setDateCreation(updatedCommande.getDateCreation());
             existingCommande.setStatus(updatedCommande.getStatus());
+            existingCommande.setDetails(updatedCommande.getDetails());
             return commandeRepo.save(existingCommande);
-        });
+        } else {
+            throw new RuntimeException("Commande non trouvée");
+        }
     }
 
     public void deleteCommande(String id) {

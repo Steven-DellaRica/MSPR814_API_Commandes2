@@ -19,7 +19,6 @@ public class Commande {
 
     @ManyToOne
     @JoinColumn(name = "status_id", nullable = false)
-    @JsonManagedReference
     private Status status;
 
     @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL, orphanRemoval = true)
@@ -27,14 +26,13 @@ public class Commande {
 
     public Commande() {
         this.id = UUID.randomUUID().toString();
-        //this.dateCreation = LocalDate.now();
+        this.dateCreation = LocalDate.now();
     }
 
     // Getters et Setters
     public String getId() {
         return id;
     }
-
     public void setId(String id) {
         this.id = id;
     }
@@ -42,7 +40,6 @@ public class Commande {
     public LocalDate getDateCreation() {
         return dateCreation;
     }
-
     public void setDateCreation(LocalDate dateCreation) {
         this.dateCreation = dateCreation;
     }
@@ -52,5 +49,12 @@ public class Commande {
     }
     public void setStatus(Status status) {
         this.status = status;
+    }
+
+    public List<Details> getDetails() {
+        return details;
+    }
+    public void setDetails(List<Details> details) {
+        this.details = details;
     }
 }

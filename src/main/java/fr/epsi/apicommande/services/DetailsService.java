@@ -7,37 +7,37 @@ import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class DetailsService {
+    private final DetailsRepository detailsRepository;
 
-    private final DetailsRepository detailsRepo;
-
-    public DetailsService(DetailsRepository detailsRepo, CommandeRepository commandeRepo) {
-        this.detailsRepo = detailsRepo;
+    public DetailsService(DetailsRepository detailsRepository) {
+        this.detailsRepository = detailsRepository;
     }
 
     public List<Details> getAllDetails() {
-        return detailsRepo.findAll();
+        return detailsRepository.findAll();
     }
 
-    public Details getDetailsById(String id) {
-        return detailsRepo.findById(id).orElseThrow(() -> new EntityNotFoundException("Details introuvable avec ID : " + id));
+    public Optional<Details> getDetailsById(String id) {
+        return detailsRepository.findById(id);
     }
 
     public Details createDetails(Details details) {
-        return detailsRepo.save(details);
+        return detailsRepository.save(details);
     }
 
     public Details updateDetails(String id, Details updatedDetails) {
-        return detailsRepo.findById(id).map(details -> {
+        return detailsRepository.findById(id).map(details -> {
             details.setQuantity(updatedDetails.getQuantity());
-            details.setCommande(updatedDetails.getCommande());
-            return detailsRepo.save(details);
-        }).orElseThrow(() -> new EntityNotFoundException("Details introuvable avec ID : " + id));
+            details.setProduitId(updatedDetails.getProduitId());
+            return detailsRepository.save(details);
+        }).orElse(null);
     }
 
     public void deleteDetails(String id) {
-        detailsRepo.deleteById(id);
+        detailsRepository.deleteById(id);
     }
 }

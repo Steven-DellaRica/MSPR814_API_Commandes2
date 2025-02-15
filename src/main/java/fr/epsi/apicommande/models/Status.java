@@ -1,6 +1,7 @@
 package fr.epsi.apicommande.models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.HashSet;
@@ -18,7 +19,7 @@ public class Status {
     private String currentStatus;
 
     @OneToMany(mappedBy = "status", cascade = CascadeType.ALL)
-    @JsonBackReference
+    @JsonIgnore
     private Set<Commande> commandes = new HashSet<>();
 
     public Status() {
