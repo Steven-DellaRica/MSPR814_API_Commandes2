@@ -29,10 +29,12 @@ public class CommandeService {
     }
 
     public Commande createCommande(Commande commande) {
-        if (commande.getStatus() == null) {
-            Status defaultStatus = statusRepo.findById("8843acbc-8058-488b-83a8-74e6078ab692").orElseThrow(() -> new RuntimeException("Status non trouvé"));
-            commande.setStatus(defaultStatus);
-        }
+//        if (commande.getStatus() == null) {
+//            Status defaultStatus = statusRepo.findByCurrentStatus("En attente")
+//                    .orElseThrow(() -> new RuntimeException("Status non trouvé"));
+//
+//            commande.setStatus(defaultStatus);
+//        }
         return commandeRepo.save(commande);
     }
 
