@@ -17,6 +17,9 @@ public class Details {
     @Column(nullable = false)
     private String produitId;
 
+    @Column(nullable = false)
+    private double price;
+
     @ManyToOne
     @JoinColumn(name = "commande_id", nullable = false)
     private Commande commande;
@@ -47,6 +50,13 @@ public class Details {
 
     public void setProduitId(String produitId) {
         this.produitId = produitId;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+    public void setPrice(double price) {
+        this.price = price;
     }
 
     public Commande getCommande() {
