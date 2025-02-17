@@ -1,5 +1,6 @@
 package fr.epsi.apicommande.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class Details {
 
     @ManyToOne
     @JoinColumn(name = "commande_id", nullable = false)
+    @JsonIgnore
     private Commande commande;
 
     public Details() {
