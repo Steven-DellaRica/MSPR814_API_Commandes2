@@ -31,6 +31,14 @@ public class RabbitMQListener {
     public void receiveMessage(List<ProduitMessage> produits) {
 
         try {
+            Status defaultStatus = statusRepo.findByCurrentStatus("En attente")
+                    .orElseThrow(() -> new RuntimeException("Le status 'En attente' est introuvable"));
+
+            Commande newCommande = new Commande();
+            newCommande.setUsername("jean_doe");
+            newCommande.setStatus(defaultStatus);
+            Commande savedCommande = commandeService.createCommande(newCommande);
+
             for (ProduitMessage produit : produits) {
                 System.out.println("Produit reçu : " + produit);
 
@@ -42,13 +50,6 @@ public class RabbitMQListener {
                 System.out.println("J'ai récupéré prix : " + price);
                 System.out.println("J'ai récupéré quantité : " + quantity);
 
-                Status defaultStatus = statusRepo.findByCurrentStatus("En attente")
-                        .orElseThrow(() -> new RuntimeException("Le status 'En attente' est introuvable"));
-
-                Commande newCommande = new Commande();
-                newCommande.setUsername("jean_doe");
-                newCommande.setStatus(defaultStatus);
-                Commande savedCommande = commandeService.createCommande(newCommande);
 
                 // Créer les détails liés à cette commande
                 Details details = new Details();
