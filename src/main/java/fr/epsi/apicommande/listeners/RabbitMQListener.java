@@ -2,14 +2,13 @@ package fr.epsi.apicommande.listeners;
 
 import fr.epsi.apicommande.models.Commande;
 import fr.epsi.apicommande.models.Details;
+import fr.epsi.apicommande.models.ProduitMessage;
 import fr.epsi.apicommande.models.Status;
 import fr.epsi.apicommande.repositories.StatusRepository;
 import fr.epsi.apicommande.services.CommandeService;
 import fr.epsi.apicommande.services.DetailsService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
-
-import java.util.Map;
 
 @Service
 public class RabbitMQListener {
@@ -25,12 +24,12 @@ public class RabbitMQListener {
     }
 
     @RabbitListener(queues = "product_info_queue")
-    public void receiveMessage(Map<String, Object> message) {
+    public void receiveMessage(ProduitMessage message) {
         System.out.println("Coucou Kévin ! Message reçu dans API_Commande : " + message);
 
-        String produitId = (String) message.get("Id");
-        double price = Double.parseDouble(message.get("Price").toString());
-        int quantity = Integer.parseInt(message.get("Quantity").toString());
+        String produitId = message.getId();
+        double price = message.getPrice();
+        int quantity = message.getQuantity();
 
         System.out.println("J'ai récupéré l'Id : " + produitId);
         System.out.println("J'ai récupéré prix : " + price);
