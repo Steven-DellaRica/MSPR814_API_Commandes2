@@ -16,6 +16,9 @@ public class Commande {
     @Column(name = "date_creation", nullable = false)
     private LocalDate dateCreation;
 
+    @Column(name = "username", nullable = false)
+    private String username;
+
     @ManyToOne
     @JoinColumn(name = "status_id")
     private Status status;
@@ -42,6 +45,9 @@ public class Commande {
     public void setDateCreation(LocalDate dateCreation) {
         this.dateCreation = dateCreation;
     }
+
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
     public Status getStatus() {
         return status;

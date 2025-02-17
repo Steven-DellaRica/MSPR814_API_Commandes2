@@ -21,6 +21,8 @@ public class Details {
     @Column(nullable = false)
     private double price;
 
+
+
     @ManyToOne
     @JoinColumn(name = "commande_id", nullable = false)
     @JsonIgnore
