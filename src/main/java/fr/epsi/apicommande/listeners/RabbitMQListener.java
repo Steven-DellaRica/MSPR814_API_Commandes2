@@ -1,6 +1,5 @@
 package fr.epsi.apicommande.listeners;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.epsi.apicommande.models.Commande;
 import fr.epsi.apicommande.models.Details;
 import fr.epsi.apicommande.models.ProduitMessage;
@@ -19,7 +18,6 @@ public class RabbitMQListener {
     private final CommandeService commandeService;
     private final DetailsService detailsService;
     private final StatusRepository statusRepo;
-    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public RabbitMQListener (CommandeService commandeService, DetailsService detailsService, StatusRepository statusRepo) {
         this.commandeService = commandeService;
@@ -61,7 +59,7 @@ public class RabbitMQListener {
                 // Sauvegarder les détails
                 detailsService.createDetails(details);
 
-                System.out.println("Re Coucou Kévin, la commande a été créée avec ID: " + savedCommande.getId());
+                System.out.println("La commande a été créée avec ID: " + savedCommande.getId());
             }
         } catch (Exception e) {
             System.err.println("Erreur de conversion JSON : " + e.getMessage());

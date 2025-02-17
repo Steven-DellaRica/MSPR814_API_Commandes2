@@ -1,9 +1,7 @@
 package fr.epsi.apicommande.services;
 
 import fr.epsi.apicommande.models.Details;
-import fr.epsi.apicommande.repositories.CommandeRepository;
 import fr.epsi.apicommande.repositories.DetailsRepository;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
