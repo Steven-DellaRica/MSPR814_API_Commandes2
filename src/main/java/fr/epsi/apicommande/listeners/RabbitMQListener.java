@@ -1,5 +1,6 @@
 package fr.epsi.apicommande.listeners;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.epsi.apicommande.models.Commande;
 import fr.epsi.apicommande.models.Details;
 import fr.epsi.apicommande.models.ProduitMessage;
@@ -10,12 +11,15 @@ import fr.epsi.apicommande.services.DetailsService;
 import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class RabbitMQListener {
 
     private final CommandeService commandeService;
     private final DetailsService detailsService;
     private final StatusRepository statusRepo;
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     public RabbitMQListener (CommandeService commandeService, DetailsService detailsService, StatusRepository statusRepo) {
         this.commandeService = commandeService;
@@ -24,34 +28,47 @@ public class RabbitMQListener {
     }
 
     @RabbitListener(queues = "product_info_queue")
-    public void receiveMessage(ProduitMessage message) {
-        System.out.println("Coucou Kévin ! Message reçu dans API_Commande : " + message);
+    public void receiveMessage(String message) {
 
-        String produitId = message.getId();
-        double price = message.getPrice();
-        int quantity = message.getQuantity();
+        try {
+            System.out.println("Coucou Kévin ! Message brut reçu : " + message);  // Debug
 
-        System.out.println("J'ai récupéré l'Id : " + produitId);
-        System.out.println("J'ai récupéré prix : " + price);
-        System.out.println("J'ai récupéré quantité : " + quantity);
+            List<ProduitMessage> produits = objectMapper.readValue(
+                    message, objectMapper.getTypeFactory().constructCollectionType(List.class, ProduitMessage.class)
+            );
 
-        Status defaultStatus = statusRepo.findByCurrentStatus("En attente")
-                .orElseThrow(() -> new RuntimeException("Le status 'En attente' est introuvable"));
+            for (ProduitMessage produit : produits) {
+                System.out.println("Produit reçu : " + produit);
 
-        Commande newCommande = new Commande();
-        newCommande.setStatus(defaultStatus);
-        Commande savedCommande = commandeService.createCommande(newCommande);
+                String produitId = produit.getId();
+                double price = produit.getPrice();
+                int quantity = produit.getQuantity();
 
-        // Créer les détails liés à cette commande
-        Details details = new Details();
-        details.setProduitId(produitId);
-        details.setPrice(price);
-        details.setQuantity(quantity);
-        details.setCommande(savedCommande); // Associer la commande
+                System.out.println("J'ai récupéré l'Id : " + produitId);
+                System.out.println("J'ai récupéré prix : " + price);
+                System.out.println("J'ai récupéré quantité : " + quantity);
 
-        // Sauvegarder les détails
-        detailsService.createDetails(details);
+                Status defaultStatus = statusRepo.findByCurrentStatus("En attente")
+                        .orElseThrow(() -> new RuntimeException("Le status 'En attente' est introuvable"));
 
-        System.out.println("Re Coucou Kévin, la commande a été créée avec ID: " + savedCommande.getId());
+                Commande newCommande = new Commande();
+                newCommande.setStatus(defaultStatus);
+                Commande savedCommande = commandeService.createCommande(newCommande);
+
+                // Créer les détails liés à cette commande
+                Details details = new Details();
+                details.setProduitId(produitId);
+                details.setPrice(price);
+                details.setQuantity(quantity);
+                details.setCommande(savedCommande); // Associer la commande
+
+                // Sauvegarder les détails
+                detailsService.createDetails(details);
+
+                System.out.println("Re Coucou Kévin, la commande a été créée avec ID: " + savedCommande.getId());
+            }
+        } catch (Exception e) {
+            System.err.println("Erreur de conversion JSON : " + e.getMessage());
+        }
     }
 }
