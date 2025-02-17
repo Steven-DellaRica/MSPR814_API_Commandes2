@@ -1,6 +1,5 @@
 package fr.epsi.apicommande.models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 
@@ -22,8 +21,11 @@ public class Status {
     @JsonIgnore
     private Set<Commande> commandes = new HashSet<>();
 
-    public Status() {
+    public Status() {}
+
+    public Status(String currentStatus) {
         this.id = UUID.randomUUID().toString();
+        this.currentStatus = currentStatus;
     }
 
     public String getId() {
