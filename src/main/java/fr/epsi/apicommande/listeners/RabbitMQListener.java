@@ -28,14 +28,9 @@ public class RabbitMQListener {
     }
 
     @RabbitListener(queues = "product_info_queue")
-    public void receiveMessage(String message) {
+    public void receiveMessage(List<ProduitMessage> produits) {
 
         try {
-            System.out.println("Coucou Kévin ! Message brut reçu : " + message);  // Debug
-
-            List<ProduitMessage> produits = objectMapper.readValue(
-                    message, objectMapper.getTypeFactory().constructCollectionType(List.class, ProduitMessage.class)
-            );
 
             for (ProduitMessage produit : produits) {
                 System.out.println("Produit reçu : " + produit);
