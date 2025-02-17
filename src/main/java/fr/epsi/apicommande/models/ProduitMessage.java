@@ -4,23 +4,23 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ProduitMessage {
     @JsonProperty
-    private String id;
+    private String Id;
 
     @JsonProperty
-    private double price;
+    private double Price;
 
     @JsonProperty
-    private int quantity;
+    private int Quantity;
 
     public String getId() {
-        return id;
+        return Id;
     }
 
     public double getPrice() {
-        return price;
+        return Price;
     }
 
     public int getQuantity() {
-        return quantity;
+        return Quantity;
     }
 }
